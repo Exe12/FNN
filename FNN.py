@@ -15,7 +15,8 @@ class FNN:
     	self.valuesWeights = []
     	for i in range(self.lHS):
     		self.layerHidden.append(np.zeros(shape=(self.nHS,1)))
-    	for i in range()
+    	for i in range(1+1+lHS-1):
+    		
 
 
 
