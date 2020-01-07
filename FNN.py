@@ -1,5 +1,5 @@
 import numpy as np
-
+#Activation: RELU
 class FNN:
     def __init__(self,neuronsInput,layersHidden,neuronsHidden,neuronsOutput,learningRate):
         #Set object vars
