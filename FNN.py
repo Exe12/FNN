@@ -1,15 +1,22 @@
 import numpy as np
 
 class FNN:
-    def __init__(self,neuronsInput,neuronsHidden,neuronsOutput,learningRate):
+    def __init__(self,neuronsInput,layersHidden,neuronsHidden,neuronsOutput,learningRate):
     	#Set object vars
-    	self.nI = neuronsInput
-    	self.nH = neuronsHidden
-    	self.nO = neuronsOutput
+    	self.nIS = neuronsInput
+    	self.lHS = layersHidden
+    	self.nHS = neuronsHidden
+    	self.nOS = neuronsOutput
     	self.lR = learningRate
     	#Initialise input and output layers
-    	self.layerInput = np.array(np.arange(self.nI), ndmin=2).T
-    	self.layerOutput = np.array(np.arange(self.nO), ndmin=2).T
+    	self.layerInput = np.zeros(shape=(self.nIS,1))
+    	self.layerOutput = np.zeros(shape=(self.nOS,1))
+    	self.layerHidden = []
+    	self.valuesWeights = []
+    	for i in range(self.lHS):
+    		self.layerHidden.append(np.zeros(shape=(self.nHS,1)))
+    	for i in range()
+
 
 
 
