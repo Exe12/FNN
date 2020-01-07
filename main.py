@@ -7,4 +7,5 @@ if __name__ == "__main__":
     myFNN.testClass()
     myFNN.dump_vars()
     #myFNN.dump_layers()
+    #print(np.random.rand(2,3))
     	
