@@ -73,20 +73,22 @@ class FNN:
             self.allLayersError[x-1] = np.matmul(self.matrixWeights[x-1].T, self.allLayersError[x])
         return self.allLayersError
 
-    def _mapMatrix(self,matrix,function):
+    def _mapMatrixFunc(self,matrix,function):
         for i in range(len(matrix)):
             for j in range(len(matrix[i])):
                 matrix[i][j] = function(matrix[i][j])
         return matrix
 
-    def _train_calcWeightGradients(self,allLayers,allLayersError):      #Calculate all Weight Gradient Matrixs foreach Weight Matrix
+    def _train_calcWeightGradientsAndBias(self,allLayers,allLayersError):      #Calculate all Weight Gradient Matrixs foreach Weight Matrix
         self.matrixWeightsGradients = []                                #__Create Array for the Weight Gradients Matrixs
+        self.newBias = []
         for i in range(self.vWS):
-            self.matrixWeightsGradients.append(\
+            self.newBias.append(\
                        self.lr * \
                        allLayersError[i+1] * \
-                       self._mapMatrix(allLayers[i+1],self._dActFuncPreActFunc) * \
-                       allLayers[i].T)
+                       self._mapMatrixFunc(allLayers[i+1],self._dActFuncPreActFunc))
+            self.matrixWeightsGradients.append(self.newBias[len(self.newBias)-1] * allLayers[i].T)
+        self.bias = self.newBias
         return self.matrixWeightsGradients
 
 
@@ -95,7 +97,7 @@ class FNN:
         self.prediction = self.predict(inputData)                       #__Calculate prediction
         self.allLayers = self.aLLP                                      #__Load spacer for collection (all neurons from last prediction) to get the neurons/layers 
         self.allLayersError = self._train_calcErrors(expectedResult,self.prediction)
-        self.matrixWeightsGradients = self._train_calcWeightGradients(self.allLayers,self.allLayersError)
+        self.matrixWeightsGradients = self._train_calcWeightGradientsAndBias(self.allLayers,self.allLayersError)
         return self.matrixWeightsGradients
 
    

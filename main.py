@@ -11,4 +11,5 @@ if __name__ == "__main__":
     print(myFNN.predict([1,0,1,1]))
     print("Gradients [1,1,0,1]-->1: ")
     print(myFNN.train([1,0,1,1],[1,1,0,1]))
+    print(myFNN.predict([1,0,1,1]))
     print("---------------------------------------------------------")
