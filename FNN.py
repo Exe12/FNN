@@ -9,7 +9,7 @@ class FNN:
         self.nOS = neuronsOutput
         self.tNL = 1+self.lHS+1                                         #Number of total layers
         self.vWS = self.tNL-1                                           #Number of weight matrixs
-        self.bias = np.zeros(shape=(9))#np.random.rand(self.vWS)
+        self.bias = np.zeros(shape=(self.vWS))#np.random.rand(self.vWS)
         self.actFuncName = activationFunction
         #Initialise input and output layers
         self.layerInput = np.zeros(shape=(self.nIS,1))                  #Input Layer array of neurons with zeros
@@ -18,10 +18,10 @@ class FNN:
         self.matrixWeights = []                                         #Array for Weight Matrixs of weight values
         for i in range(self.lHS):                                       #Fill the Array for Hidden Layers
             self.layerHidden.append(np.zeros(shape=(self.nHS,1)))       #Create Hidden Layer with zeros
-        self.matrixWeights.append(np.random.rand(self.nIS,self.nHS))    #Create and add Weight Matrix for Input-->Hidden_1
+        self.matrixWeights.append(np.random.rand(self.nHS,self.nIS))    #Create and add Weight Matrix for Input-->Hidden_1
         for i in range(self.vWS-2):                                     #Fill the Array for Weight Matrixs
             self.matrixWeights.append(np.random.rand(self.nHS,self.nHS))#Create and add Weight Matrix for Hidden_1-->...-->Hidden_n
-        self.matrixWeights.append(np.random.rand(self.nHS,self.nOS))    #Create and add Weight Matrix for Hidden_n-->Output
+        self.matrixWeights.append(np.random.rand(self.nOS,self.nHS))    #Create and add Weight Matrix for Hidden_n-->Output
 
     def _sigmoid(self,x):                                               #Sigmoid - activation function
         return 1/(1+np.exp(-x))                                         #__Applay sigmoid function to x and return it: sigmoid(x) = 1/1(1+exp(-x))
