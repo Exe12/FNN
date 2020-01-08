@@ -10,8 +10,7 @@ class FNN:
         self.tNL = 1+self.lHS+1                                         #Number of total layers
         self.vWS = self.tNL-1                                           #Number of weight matrixs
         self.bias = np.zeros(shape=(self.vWS))#np.random.rand(self.vWS)
-        self.actFuncName = activationFunction
-        #Initialise input and output layers
+        self.actFuncName = activationFunction                           #Initialise input and output layers
         self.layerInput = np.zeros(shape=(self.nIS,1))                  #Input Layer array of neurons with zeros
         self.layerOutput = np.zeros(shape=(self.nOS,1))                 #Output Layer array of neurons with zeros
         self.layerHidden = []                                           #Array for Hidden Layers array of neurons
@@ -48,6 +47,23 @@ class FNN:
             self.allLayers[i+1] = self._calcNextLayer(self.allLayers[i],self.matrixWeights[i],self.bias[i])#__Calculate next Layer and set it in the collection (all Layers)
         return self.allLayers[self.tNL-1]                               #__Return OutputLayer (last layer of collection)
 
+    def train(self,inputData,expectedResult):
+        self.errors = np.zeros(shape=(len(expectedResult),1))            #__Create error_vector
+        self.prediction = self.predict(inputData)                       #__Calculate prediction
+        for i in range(len(self.errors)):                                #__Calculate error foreach prediction and add to error_vector
+            self.errors[i][0] = expectedResult[i] - self.prediction[i]
+        self.allLayersError = []                                        #__Create array (aka error_collection) for error_vectors foreach Layer, so every Layer has a error_vector
+        self.allLayersError.append(np.zeros(shape=(self.nIS,1)))
+        for i in range(self.lHS):
+            self.allLayersError.append(np.zeros(shape=(self.nHS,1)))
+        self.allLayersError.append(np.zeros(shape=(self.nOS,1)))
+        self.allLayersError[len(self.allLayersError)-1] = self.errors   #__Set last error-layer as calculated error_vector (output-error)
+        for i in range(self.tNL-1):                                     #__Calcluate each error_vector from last layer to first (output-->hidden-->input)
+            x = self.tNL-1 - i                                          #__Because from back to front
+            self.allLayersError[x-1] = np.matmul(self.matrixWeights[x-1].T, self.allLayersError[x])
+        return self.allLayersError
+
+   
 
 
 

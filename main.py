@@ -3,9 +3,12 @@ from FNN import FNN
 
 
 if __name__ == "__main__":
-    myFNN = FNN(neuronsInput=9,layersHidden=10,neuronsHidden=20,neuronsOutput=9,activationFunction="sigmoid")
+    myFNN = FNN(neuronsInput=4,layersHidden=1,neuronsHidden=4,neuronsOutput=4,activationFunction="sigmoid")
     print("---------------------------------------------------------")
     print("Test Predict")
-    print(myFNN.predict([1,0,0,0,0,0,0,0,0]))
-    print(myFNN.predict([0,1,0,0,0,0,0,0,0]))
+    #print(myFNN.predict([1,0,0,0,0,0,0,0,0]))
+    print("Input [1,0]: ")
+    print(myFNN.predict([1,0,1,1]))
+    print("Error [1,1,0,1]-->1: ")
+    print(myFNN.train([1,0,1,1],[1,1,0,1]))
     print("---------------------------------------------------------")
