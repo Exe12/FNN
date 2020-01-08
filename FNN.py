@@ -9,8 +9,10 @@ class FNN:
         self.nOS = neuronsOutput
         self.tNL = 1+self.lHS+1                                         #Number of total layers
         self.vWS = self.tNL-1                                           #Number of weight matrixs
-        self.bias = np.zeros(shape=(self.vWS))#np.random.rand(self.vWS)
-        self.actFuncName = activationFunction                           #Initialise input and output layers
+        self.bias = np.zeros(shape=(self.vWS))                          #np.random.rand(self.vWS)
+        self.actFuncName = activationFunction
+        self.aLLP = []                                                  #"All Layers Last Prediction" stores the layers and neurons from last prediction for the training (backpropagation)            
+        #Initialise input and output layers
         self.layerInput = np.zeros(shape=(self.nIS,1))                  #Input Layer array of neurons with zeros
         self.layerOutput = np.zeros(shape=(self.nOS,1))                 #Output Layer array of neurons with zeros
         self.layerHidden = []                                           #Array for Hidden Layers array of neurons
@@ -45,12 +47,14 @@ class FNN:
         self.allLayers.append(self.layerOutput)                         #__Add OutputLayer to collection
         for i in range(self.tNL-1):                                     #__Iterate over all Layers(collection)
             self.allLayers[i+1] = self._calcNextLayer(self.allLayers[i],self.matrixWeights[i],self.bias[i])#__Calculate next Layer and set it in the collection (all Layers)
+        self.aLLP = self.allLayers                        #__Spacer for the collection, needed for the training to get the last collection neurons for backpropagation
         return self.allLayers[self.tNL-1]                               #__Return OutputLayer (last layer of collection)
 
     def train(self,inputData,expectedResult):
-        self.errors = np.zeros(shape=(len(expectedResult),1))            #__Create error_vector
+        self.errors = np.zeros(shape=(len(expectedResult),1))           #__Create error_vector
         self.prediction = self.predict(inputData)                       #__Calculate prediction
-        for i in range(len(self.errors)):                                #__Calculate error foreach prediction and add to error_vector
+        self.allLayers = self.aLLP                                      #__Load spacer for collection (all neurons from last prediction) to get the neurons/layers 
+        for i in range(len(self.errors)):                               #__Calculate error foreach prediction and add to error_vector
             self.errors[i][0] = expectedResult[i] - self.prediction[i]
         self.allLayersError = []                                        #__Create array (aka error_collection) for error_vectors foreach Layer, so every Layer has a error_vector
         self.allLayersError.append(np.zeros(shape=(self.nIS,1)))
