@@ -7,21 +7,17 @@ if __name__ == "__main__":
     print("---------------------------------------------------------")
     #print("[0,0]: "+str(myFNN.predict([0,0])))
     #print("[0,1]: "+str(myFNN.predict([0,1])))
-    #print("[1,0]: "+str(myFNN.predict([1,0])))
-    print("[1,1]: "+str(myFNN.predict([1,1])))
+    print("[1,0]: "+str(myFNN.predict([1,0])))
+    #print("[1,1]: "+str(myFNN.predict([1,1])))
     print("")
     data = [[[0,0],[0]],[[0,1],[1]],[[1,0],[1]],[[1,1],[0]]]
     print("Training....")
-    for i in range(1000):
+    for i in range(1):
         test = data[np.random.randint(0,4)]
         myFNN.train(test)
     print("")
     #print("[0,0]: "+str(myFNN.predict([0,0])))
     #print("[0,1]: "+str(myFNN.predict([0,1])))
-    #print("[1,0]: "+str(myFNN.predict([1,0])))
-    print("[1,1]: "+str(myFNN.predict([1,1])))
+    print("[1,0]: "+str(myFNN.predict([1,0])))
+    #print("[1,1]: "+str(myFNN.predict([1,1])))
     print("---------------------------------------------------------")
-
-
-    #m1 = np.array([[1,1,1],[2,2,2],[3,3,3]])
-    #print(m1+m1)

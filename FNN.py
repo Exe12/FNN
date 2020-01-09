@@ -85,12 +85,10 @@ class FNN:
     def _train_calcWeightGradientsAndBias(self,allLayers,allLayersError):      #Calculate all Weight Gradient Matrixs foreach Weight Matrix
         self.matrixWeightsGradients = []                                       #__Create Array for the Weight Gradients Matrixs
         for i in range(self.vWS):
-            self.newBias = (\
-                       self.lr * \
-                       allLayersError[i+1] * \
-                       self._mapMatrixFunc(allLayers[i+1],self._dActFuncPreActFunc))
-            self.matrixWeightsGradients.append(self.newBias * allLayers[i].T)
-            self.bias[i] = self.bias[i] + self.newBias
+            self.newBias = self.lr * (allLayersError[i+1] * self._mapMatrixFunc(allLayers[i+1], self._dActFuncPreActFunc))
+            #self.newBias = np.matmul(self.lr * allLayersError[i+1], self._mapMatrixFunc(allLayers[i+1],self._dActFuncPreActFunc))
+            self.matrixWeightsGradients.append(np.matmul(self.newBias, allLayers[i].T))#self.newBias * allLayers[i].T)
+            self.bias[i] = np.add(self.bias[i],self.newBias)#self.bias[i] + self.newBias
         return self.matrixWeightsGradients       
 
 
@@ -102,7 +100,7 @@ class FNN:
         self.allLayersError = self._train_calcErrors(self.expectedResult,self.prediction)
         self.matrixWeightsGradients = self._train_calcWeightGradientsAndBias(self.allLayers,self.allLayersError)
         for i in range(self.vWS):
-            self.matrixWeights[i] = self.matrixWeights[i] + self.matrixWeightsGradients[i]
+            self.matrixWeights[i] = np.add(self.matrixWeights[i],self.matrixWeightsGradients[i])#self.matrixWeights[i] + self.matrixWeightsGradients[i]
 
    
 
