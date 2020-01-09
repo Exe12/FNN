@@ -10,7 +10,10 @@ class FNN:
         self.lr = learningRate
         self.tNL = 1+self.lHS+1                                         #Number of total layers
         self.vWS = self.tNL-1                                           #Number of weight matrixs
-        self.bias = np.random.rand(self.vWS)#np.zeros(shape=(self.vWS))
+        self.bias = []
+        for i in range(self.vWS-1):
+            self.bias.append(np.random.rand(self.nHS,1))
+        self.bias.append(np.random.rand(self.nOS,1))
         self.actFuncName = activationFunction
         self.aLLP = []                                                  #"All Layers Last Prediction" stores the layers and neurons from last prediction for the training (backpropagation)            
         #Initialise input and output layers
@@ -39,7 +42,7 @@ class FNN:
         if self.actFuncName == "sigmoid":
             return self._dsigmoidPreSigmoid(x)
 
-    def _calcNextLayer(self,layer1,weights,bias):                       #Calculate next Layer with layer bevor and weights and bias
+    def _calcNextLayer(self,layer1,weights,bias):                      #Calculate next Layer with layer bevor and weights and bias
         self.layer2 = np.matmul(weights,layer1)+bias                    #__Calculate next layer: Layer2_vector = (Weights_matrix * Layer1_vector) + bias
         for i in range(len(self.layer2)):                               #__Foreach element in Layer2_vector
             self.layer2[i][0] = self._actFunc(self.layer2[i][0])        #____Apply activation function
@@ -70,7 +73,7 @@ class FNN:
         self.allLayersError[len(self.allLayersError)-1] = self.errors   #__Set last error-layer as calculated error_vector (output-error)
         for i in range(self.tNL-1):                                     #__Calcluate each error_vector from last layer to first (output-->hidden-->input)
             x = self.tNL-1 - i                                          #____Because from back to front
-            self.allLayersError[x-1] = np.matmul(self.matrixWeights[x-1].T, self.allLayersError[x])
+            self.allLayersError[x-1] = np.matmul(self.matrixWeights[x-1].T, self.allLayersError[x]) #.T
         return self.allLayersError
 
     def _mapMatrixFunc(self,matrix,function):
@@ -80,25 +83,26 @@ class FNN:
         return matrix
 
     def _train_calcWeightGradientsAndBias(self,allLayers,allLayersError):      #Calculate all Weight Gradient Matrixs foreach Weight Matrix
-        self.matrixWeightsGradients = []                                #__Create Array for the Weight Gradients Matrixs
-        self.newBias = []
+        self.matrixWeightsGradients = []                                       #__Create Array for the Weight Gradients Matrixs
         for i in range(self.vWS):
-            self.newBias.append(\
+            self.newBias = (\
                        self.lr * \
                        allLayersError[i+1] * \
                        self._mapMatrixFunc(allLayers[i+1],self._dActFuncPreActFunc))
-            self.matrixWeightsGradients.append(self.newBias[len(self.newBias)-1] * allLayers[i].T)
-        self.bias = self.newBias
-        return self.matrixWeightsGradients
+            self.matrixWeightsGradients.append(self.newBias * allLayers[i].T)
+            self.bias[i] = self.bias[i] + self.newBias
+        return self.matrixWeightsGradients       
 
 
-
-    def train(self,inputData,expectedResult):
-        self.prediction = self.predict(inputData)                       #__Calculate prediction
-        self.allLayers = self.aLLP                                      #__Load spacer for collection (all neurons from last prediction) to get the neurons/layers 
-        self.allLayersError = self._train_calcErrors(expectedResult,self.prediction)
+    def train(self,input):
+        self.inputData = input[0]
+        self.expectedResult = input[1]
+        self.prediction = self.predict(self.inputData)                       #__Calculate prediction
+        self.allLayers = self.aLLP                                           #__Load spacer for collection (all neurons from last prediction) to get the neurons/layers 
+        self.allLayersError = self._train_calcErrors(self.expectedResult,self.prediction)
         self.matrixWeightsGradients = self._train_calcWeightGradientsAndBias(self.allLayers,self.allLayersError)
-        return self.matrixWeightsGradients
+        for i in range(self.vWS):
+            self.matrixWeights[i] = self.matrixWeights[i] + self.matrixWeightsGradients[i]
 
    
 

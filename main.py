@@ -3,13 +3,25 @@ from FNN import FNN
 
 
 if __name__ == "__main__":
-    myFNN = FNN(neuronsInput=4,layersHidden=1,neuronsHidden=4,neuronsOutput=4,activationFunction="sigmoid",learningRate=0.2)
+    myFNN = FNN(neuronsInput=2,layersHidden=1,neuronsHidden=2,neuronsOutput=1,activationFunction="sigmoid",learningRate=0.1)
     print("---------------------------------------------------------")
-    print("Test Predict")
-    #print(myFNN.predict([1,0,0,0,0,0,0,0,0]))
-    print("Input [1,0]: ")
-    print(myFNN.predict([1,0,1,1]))
-    print("Gradients [1,1,0,1]-->1: ")
-    print(myFNN.train([1,0,1,1],[1,1,0,1]))
-    print(myFNN.predict([1,0,1,1]))
+    #print("[0,0]: "+str(myFNN.predict([0,0])))
+    #print("[0,1]: "+str(myFNN.predict([0,1])))
+    #print("[1,0]: "+str(myFNN.predict([1,0])))
+    print("[1,1]: "+str(myFNN.predict([1,1])))
+    print("")
+    data = [[[0,0],[0]],[[0,1],[1]],[[1,0],[1]],[[1,1],[0]]]
+    print("Training....")
+    for i in range(1000):
+        test = data[np.random.randint(0,4)]
+        myFNN.train(test)
+    print("")
+    #print("[0,0]: "+str(myFNN.predict([0,0])))
+    #print("[0,1]: "+str(myFNN.predict([0,1])))
+    #print("[1,0]: "+str(myFNN.predict([1,0])))
+    print("[1,1]: "+str(myFNN.predict([1,1])))
     print("---------------------------------------------------------")
+
+
+    #m1 = np.array([[1,1,1],[2,2,2],[3,3,3]])
+    #print(m1+m1)
