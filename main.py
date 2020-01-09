@@ -12,7 +12,7 @@ if __name__ == "__main__":
     print("")
     data = [[[0,0],[0]],[[0,1],[1]],[[1,0],[1]],[[1,1],[0]]]
     print("Training....")
-    for i in range(1):
+    for i in range(10000):
         test = data[np.random.randint(0,4)]
         myFNN.train(test)
     print("")

@@ -82,12 +82,32 @@ class FNN:
                 matrix[i][j] = function(matrix[i][j])
         return matrix
 
+    def _vectorMultiplication(self,x,y):
+        self.newVector = []
+        for self.x,self.y in zip(x,y):
+            self.newVector.append(self.x[0]*self.y[0])
+        print("####")
+        print(x)
+        print("")
+        print(y)
+        print("")
+        print(self.newVector)
+        return self.newVector
+
     def _train_calcWeightGradientsAndBias(self,allLayers,allLayersError):      #Calculate all Weight Gradient Matrixs foreach Weight Matrix
         self.matrixWeightsGradients = []                                       #__Create Array for the Weight Gradients Matrixs
         for i in range(self.vWS):
+            '''
+            print("####")
+            print(allLayersError[i+1])
+            print("")
+            print(self._mapMatrixFunc(allLayers[i+1], self._dActFuncPreActFunc))
+            print("")
+            print((allLayersError[i+1] * self._mapMatrixFunc(allLayers[i+1], self._dActFuncPreActFunc)))
+            '''
             self.newBias = self.lr * (allLayersError[i+1] * self._mapMatrixFunc(allLayers[i+1], self._dActFuncPreActFunc))
             #self.newBias = np.matmul(self.lr * allLayersError[i+1], self._mapMatrixFunc(allLayers[i+1],self._dActFuncPreActFunc))
-            self.matrixWeightsGradients.append(np.matmul(self.newBias, allLayers[i].T))#self.newBias * allLayers[i].T)
+            self.matrixWeightsGradients.append(self.lr * np.dot((allLayersError[i+1] * self._mapMatrixFunc(allLayers[i+1], self._dActFuncPreActFunc)), allLayers[i].T))#np.matmul(self.newBias, allLayers[i].T))#self.newBias * allLayers[i].T)
             self.bias[i] = np.add(self.bias[i],self.newBias)#self.bias[i] + self.newBias
         return self.matrixWeightsGradients       
 
@@ -100,7 +120,7 @@ class FNN:
         self.allLayersError = self._train_calcErrors(self.expectedResult,self.prediction)
         self.matrixWeightsGradients = self._train_calcWeightGradientsAndBias(self.allLayers,self.allLayersError)
         for i in range(self.vWS):
-            self.matrixWeights[i] = np.add(self.matrixWeights[i],self.matrixWeightsGradients[i])#self.matrixWeights[i] + self.matrixWeightsGradients[i]
+            self.matrixWeights[i] += self.matrixWeightsGradients[i]#self.matrixWeights[i] + self.matrixWeightsGradients[i]
 
    
 
