@@ -1,4 +1,5 @@
 import numpy as np
+import math
 #Activation: RELU
 class FNN:
     def __init__(self,neuronsInput,layersHidden,neuronsHidden,neuronsOutput,activationFunction,learningRate):
@@ -23,13 +24,13 @@ class FNN:
         self.matrixWeights = []                                         #Array for Weight Matrixs of weight values
         for i in range(self.lHS):                                       #Fill the Array for Hidden Layers
             self.layerHidden.append(np.zeros(shape=(self.nHS,1)))       #Create Hidden Layer with zeros
-        self.matrixWeights.append(np.random.rand(self.nHS,self.nIS))    #Create and add Weight Matrix for Input-->Hidden_1
+        self.matrixWeights.append(np.random.rand(self.nHS,self.nIS)-0.5)    #Create and add Weight Matrix for Input-->Hidden_1
         for i in range(self.vWS-2):                                     #Fill the Array for Weight Matrixs
-            self.matrixWeights.append(np.random.rand(self.nHS,self.nHS))#Create and add Weight Matrix for Hidden_1-->...-->Hidden_n
-        self.matrixWeights.append(np.random.rand(self.nOS,self.nHS))    #Create and add Weight Matrix for Hidden_n-->Output
+            self.matrixWeights.append(np.random.rand(self.nHS,self.nHS)-0.5)#Create and add Weight Matrix for Hidden_1-->...-->Hidden_n
+        self.matrixWeights.append(np.random.rand(self.nOS,self.nHS)-0.5)    #Create and add Weight Matrix for Hidden_n-->Output
 
     def _sigmoid(self,x):                                               #Sigmoid - activation function
-        return 1/(1+np.exp(-x))                                         #__Applay sigmoid function to x and return it: sigmoid(x) = 1/1(1+exp(-x))
+        return 1/(1+math.exp(-x))                                         #__Applay sigmoid function to x and return it: sigmoid(x) = 1/1(1+exp(-x))
 
     def _dsigmoidPreSigmoid(self,x):
         return x*(1-x)                                                  #dsigmoid = sigmoid(x)*(1-sigmoid(x)), but sigmoid is already apllied on x
@@ -43,7 +44,7 @@ class FNN:
             return self._dsigmoidPreSigmoid(x)
 
     def _calcNextLayer(self,layer1,weights,bias):                      #Calculate next Layer with layer bevor and weights and bias
-        self.layer2 = np.matmul(weights,layer1)+bias                    #__Calculate next layer: Layer2_vector = (Weights_matrix * Layer1_vector) + bias
+        self.layer2 = np.matmul(weights,layer1)#+bias                    #__Calculate next layer: Layer2_vector = (Weights_matrix * Layer1_vector) + bias
         for i in range(len(self.layer2)):                               #__Foreach element in Layer2_vector
             self.layer2[i][0] = self._actFunc(self.layer2[i][0])        #____Apply activation function
         return self.layer2                                              #__Return new Layer2_vector
@@ -105,10 +106,17 @@ class FNN:
             print("")
             print((allLayersError[i+1] * self._mapMatrixFunc(allLayers[i+1], self._dActFuncPreActFunc)))
             '''
-            self.newBias = self.lr * (allLayersError[i+1] * self._mapMatrixFunc(allLayers[i+1], self._dActFuncPreActFunc))
+            #self.newBias = self.lr * (allLayersError[i+1] * self._mapMatrixFunc(allLayers[i+1], self._dActFuncPreActFunc))
             #self.newBias = np.matmul(self.lr * allLayersError[i+1], self._mapMatrixFunc(allLayers[i+1],self._dActFuncPreActFunc))
+            #print("######")
+            #print(allLayersError[i+1])
+            #print("")
+            #print(self._mapMatrixFunc(allLayers[i+1], self._dActFuncPreActFunc))
+            #print("")
+            #print(allLayersError[i+1] * self._mapMatrixFunc(allLayers[i+1], self._dActFuncPreActFunc))
+            #print(type(allLayersError[i+1]),type(self._mapMatrixFunc(allLayers[i+1], self._dActFuncPreActFunc)))
             self.matrixWeightsGradients.append(self.lr * np.dot((allLayersError[i+1] * self._mapMatrixFunc(allLayers[i+1], self._dActFuncPreActFunc)), allLayers[i].T))#np.matmul(self.newBias, allLayers[i].T))#self.newBias * allLayers[i].T)
-            self.bias[i] = np.add(self.bias[i],self.newBias)#self.bias[i] + self.newBias
+            #self.bias[i] = np.add(self.bias[i],self.newBias)#self.bias[i] + self.newBias
         return self.matrixWeightsGradients       
 
 
