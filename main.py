@@ -3,8 +3,9 @@ from NN import FNN
 
 
 if __name__ == "__main__":
-    myFNN = FNN(neuronsInput=2,layersHidden=1,neuronsHidden=50,neuronsOutput=1,activationFunction="sigmoid",learningRate=0.1)
+    myFNN = FNN(neuronsInput=2,layersHidden=1,neuronsHidden=20,neuronsOutput=1,activationFunction="sigmoid",learningRate=0.1)
     print("---------------------------------------------------------")
+    '''
     print("[0,0]: "+str(myFNN.predict([1,1])))
     print("[0,1]: "+str(myFNN.predict([1,2])))
     print("[1,0]: "+str(myFNN.predict([2,1])))
@@ -19,28 +20,30 @@ if __name__ == "__main__":
     print("[0,1]: "+str(myFNN.predict([1,2])))
     print("[1,0]: "+str(myFNN.predict([2,1])))
     print("[1,1]: "+str(myFNN.predict([2,2])))
+    print()
+    #print(myFNN.bias)
     print("---------------------------------------------------------")
     print()
     print()
     '''
-    print("REAL")
+    #'''
+    iterations = 1000000
+    print("REAL - Iterations: "+str(iterations))
     print("---------------------------------------------------------")
     print("[0,0]: "+str(myFNN.predict([0,0])))
     print("[0,1]: "+str(myFNN.predict([0,1])))
     print("[1,0]: "+str(myFNN.predict([1,0])))
     print("[1,1]: "+str(myFNN.predict([1,1])))
     print()
-    
     data = [[[0,0],[0]],[[0,1],[1]],[[1,0],[1]],[[1,1],[0]]]
-    for i in range(1):
+    for i in range(iterations):
         x = np.random.randint(0,4)
         myFNN.train(data[x])
-    
-    #myFNN.train([[0,1],[1]])
     print()
     print("[0,0]: "+str(myFNN.predict([0,0])))
     print("[0,1]: "+str(myFNN.predict([0,1])))
     print("[1,0]: "+str(myFNN.predict([1,0])))
     print("[1,1]: "+str(myFNN.predict([1,1])))
     print("---------------------------------------------------------")
-    '''
+    #'''
+    
