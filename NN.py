@@ -24,8 +24,8 @@ class FNN:
 		self.layerMemory.append(self.layer)
 		self.actFunc = np.vectorize(self.sigmoid)
 		for i in range(self.lHS+1):
-			self.layer = np.dot(self.weights[i], self.layer)
-			self.layerMemory.append(self.actFunc(self.layer))
+			self.layer = self.actFunc(np.dot(self.weights[i], self.layer))
+			self.layerMemory.append(self.layer)
 		return self.layer
 
 	def train(self,inputAndExpected):
@@ -35,12 +35,9 @@ class FNN:
 		self.dactFunc = np.vectorize(self.dsigmoid)
 		for i in range(self.lHS+1):
 			self.weights[len(self.weights)-1-i] += self.lr * np.dot((self.layerError[0]*self.dactFunc(self.layerMemory[len(self.layerMemory)-1-i])), self.layerMemory[len(self.layerMemory)-2-i].T)
-			self.newError = [np.dot(self.weights[len(self.weights)-1-i].T, self.layerError[0])]
-			print("######")
-			print(self.newError)
-			print()
-			print(self.layerError)
-			self.layerError = np.concatenate((self.newError, self.layerError))
-			print()
-			print(self.layerError)
+			self.newError = np.dot(self.weights[len(self.weights)-1-i].T, self.layerError[0])
+			self.spacer = []
+			self.spacer.append(self.newError)
+			self.spacer.append(self.layerError)
+			self.layerError = self.spacer
 			
