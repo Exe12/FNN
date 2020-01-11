@@ -3,6 +3,7 @@ from scipy import special
 import numpy as np
 
 class FNN:
+
 	def __init__(self,neuronsInput,layersHidden,neuronsHidden,neuronsOutput,activationFunction,learningRate):
 		self.nIS = neuronsInput
 		self.lHS = layersHidden
@@ -16,13 +17,14 @@ class FNN:
 		self.bias = [np.random.normal(0.0, self.nIS**0.5, (self.nIS, 1))]
 		self.bias.extend([np.random.normal(0.0, self.nHS**0.5, (self.nHS, 1)) for x in range(self.lHS)])
 		self.bias.append(np.random.normal(0.0, self.nOS**0.5, (self.nOS, 1)))
-
 		self.layerMemory = []
+
 	def sigmoid(self, x):
-		#return 1 / (1+math.exp(-x))
-		return special.expit(x)
+		return special.expit(x)#return 1 / (1+math.exp(-x))
+
 	def dsigmoid(self,x):
 		return x*(1.0-x)
+
 	def predict(self,inputNeurons):
 		self.layerMemory = []
 		self.layer = np.array(inputNeurons, ndmin=2).T
@@ -32,6 +34,7 @@ class FNN:
 			self.layer = self.actFunc(np.dot(self.weights[i], self.layer)+self.bias[i+1])
 			self.layerMemory.append(self.layer)
 		return self.layer
+
 	def train(self,inputAndExpected):
 		self.inputExpected = np.array(inputAndExpected[1], ndmin=2).T
 		self.prediction = self.predict(inputAndExpected[0])
@@ -39,7 +42,6 @@ class FNN:
 		self.dactFunc = np.vectorize(self.dsigmoid)
 		for i in range(self.lHS+1):
 			self.bias[len(self.bias)-1-i] += self.lr * self.layerError[0]*self.dactFunc(self.layerMemory[len(self.layerMemory)-1-i])
-			#self.weights[len(self.weights)-1-i] += np.dot(self.bias[len(self.bias)-1-i], self.layerMemory[len(self.layerMemory)-2-i].T)
 			self.weights[len(self.weights)-1-i] += np.dot(self.lr * self.layerError[0]*self.dactFunc(self.layerMemory[len(self.layerMemory)-1-i]), self.layerMemory[len(self.layerMemory)-2-i].T)
 			self.newError = np.dot(self.weights[len(self.weights)-1-i].T, self.layerError[0])
 			self.spacer = []
