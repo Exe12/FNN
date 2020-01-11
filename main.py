@@ -9,7 +9,7 @@ if __name__ == "__main__":
     # 10.000 -> ~ 3Sek
     '''
     print("---------------------------------------------------------")
-    iterations = 100000
+    iterations = 20000
     print("TicTacToe - Iterations: "+str(iterations))
     print("---------------------------------------------------------")
     data = [[[1,0,0,0,0,0,0,0,0],[0,1,0,0,0,0,0,0,0]],[[0,1,0,0,0,0,0,0,0],[0,0,1,0,0,0,0,0,0]],[[0,0,1,0,0,0,0,0,0],[0,0,0,1,0,0,0,0,0]],[[0,0,0,1,0,0,0,0,0],[0,0,0,0,1,0,0,0,0]],[[0,0,0,0,1,0,0,0,0],[0,0,0,0,0,1,0,0,0]]]
@@ -30,7 +30,7 @@ if __name__ == "__main__":
     print("5.Feld-->6.Feld: "+str(np.round(myFNN.predict(data[4][0]),3).T))
     print("---------------------------------------------------------")
     '''
-    #'''
+    '''
     print("---------------------------------------------------------")
     iterations = 10000
     print("XOR - Iterations: "+str(iterations))
@@ -50,5 +50,22 @@ if __name__ == "__main__":
     print("[1,0]: "+str(myFNN.predict([1,0])))
     print("[1,1]: "+str(myFNN.predict([1,1])))
     print("---------------------------------------------------------")
+    myFNN.exportWeights("C:/Users/nick/OneDrive/Desktop/weights.npz")
+    myFNN.exportBias("C:/Users/nick/OneDrive/Desktop/bias.npz")
+    myFNN.exportFNN("C:/Users/nick/OneDrive/Desktop/fnn.npz")
+    '''
+    #'''
+    print("[0,0]: "+str(myFNN.predict([0,0])))
+    print("[0,1]: "+str(myFNN.predict([0,1])))
+    print("[1,0]: "+str(myFNN.predict([1,0])))
+    print("[1,1]: "+str(myFNN.predict([1,1])))
+    print()
+    #myFNN.importWeights("C:/Users/nick/OneDrive/Desktop/weights.npz")
+    #myFNN.importBias("C:/Users/nick/OneDrive/Desktop/bias.npz")
+    myFNN.importFNN("C:/Users/nick/OneDrive/Desktop/fnn.npz")
+    print("[0,0]: "+str(myFNN.predict([0,0])))
+    print("[0,1]: "+str(myFNN.predict([0,1])))
+    print("[1,0]: "+str(myFNN.predict([1,0])))
+    print("[1,1]: "+str(myFNN.predict([1,1])))
     #'''
     

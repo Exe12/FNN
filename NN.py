@@ -48,4 +48,22 @@ class FNN:
 			self.spacer.append(self.newError)
 			self.spacer.append(self.layerError)
 			self.layerError = self.spacer
+
+	def trainer(self):
+		pass
+
+	def exportWeights(self,path):
+		np.savez_compressed(path,weights=self.weights)
+	def importWeights(self,path):
+		self.weights = np.load(path,allow_pickle=True)["weights"]
+	def exportBias(self,path):
+		np.savez_compressed(path,bias=self.bias)
+	def importBias(self,path):
+		self.bias = np.load(path,allow_pickle=True)["bias"]
+	def exportFNN(self,path):
+		np.savez_compressed(path,weights=self.weights,bias=self.bias)
+	def importFNN(self,path):
+		self.data = np.load(path,allow_pickle=True)
+		self.weights = self.data["weights"]
+		self.bias = self.data["bias"]
 			
